@@ -1,7 +1,7 @@
 export const API_CONFIG = {
     // IMPORTANT: Leave apiKey as an empty string. 
     // The platform will automatically provide the key at runtime.
-    apiKey: ""
+    apiKey: "AIzaSyDHALOs_VpIGq7TdTPykGJClVe_QG4gC-o"
 };
 
 export const PROMPT_CONFIG = {

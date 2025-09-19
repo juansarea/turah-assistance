@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Requirement Analysis Assistant</title>
+    <title>Requirement Analysis Turah Assistant</title>
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter -->
@@ -55,7 +55,7 @@
     <aside id="sidebar" class="bg-white text-slate-800 w-64 min-h-screen p-4 shadow-lg fixed lg:relative transform -translate-x-full lg:translate-x-0 z-20">
         <div class="flex items-center mb-8">
             <i class="fas fa-brain text-blue-500 text-2xl mr-3"></i>
-            <h1 class="text-xl font-bold">AI Assistant</h1>
+            <h1 class="text-xl font-bold">Turah Assistant</h1>
         </div>
         <nav id="menu-container">
             <!-- Menu items will be injected here by JavaScript -->
@@ -88,12 +88,12 @@
             <div id="page-analisa" class="page-content">
                 <div class="bg-white p-6 rounded-xl shadow-sm">
                     <h3 class="text-2xl font-bold text-slate-800 mb-1">Analisa Point Requirement</h3>
-                    <p class="text-slate-500 mb-6">Masukkan poin-poin mentah dari requirement untuk dianalisa dan distrukturkan oleh AI.</p>
+                    <p class="text-slate-500 mb-6">Masukkan poin-poin mentah dari requirement untuk dianalisa dan distrukturkan oleh Turah.</p>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Input Section -->
                         <div>
-                            <label for="raw-requirements" class="block text-sm font-medium text-slate-700 mb-2">Poin Requirement Mentah:</label>
+                            <label for="raw-requirements" class="block text-sm font-medium text-slate-700 mb-2">Poin Requirement :</label>
                             <textarea id="raw-requirements" rows="15" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Contoh: User bisa login, ada dashboard, bisa lihat produk, bisa beli..."></textarea>
                             <div class="flex space-x-3 mt-4">
                                 <button id="process-btn" class="flex-1 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition shadow-sm flex items-center justify-center">
@@ -140,7 +140,7 @@
 
         <!-- Footer -->
         <footer class="bg-white text-center text-sm p-4 text-slate-500 border-t">
-            © 2025 Requirement Analysis Assistant. Dibuat dengan Gemini.
+            © 2025 Requirement Analysis Assistant with Turah.
         </footer>
     </div>
     
@@ -288,7 +288,7 @@
                     }
                 } catch (error) {
                     console.error("Error calling Gemini API:", error);
-                    resultBox.textContent = `Terjadi kesalahan saat menghubungi AI. Silakan coba lagi.\n\nDetail: ${error.message}`;
+                    resultBox.textContent = `Terjadi kesalahan saat menghubungi Turah. Silakan coba lagi.\n\nDetail: ${error.message}`;
                 } finally {
                     loadingIndicator.classList.add('hidden');
                 }

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requirement Analysis Assistant</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        /* Custom scrollbar for result box */
+        #result-box::-webkit-scrollbar {
+            width: 8px;
+        }
+        #result-box::-webkit-scrollbar-track {
+            background: #e2e8f0; /* slate-200 */
+        }
+        #result-box::-webkit-scrollbar-thumb {
+            background-color: #94a3b8; /* slate-400 */
+            border-radius: 10px;
+            border: 2px solid #e2e8f0; /* slate-200 */
+        }
+        /* Style for loading animation */
+        .loader {
+            border: 4px solid #f3f3f3; /* light grey */
+            border-top: 4px solid #3b82f6; /* blue-500 */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Add transition for sidebar */
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-white text-slate-800 w-64 min-h-screen p-4 shadow-lg fixed lg:relative transform -translate-x-full lg:translate-x-0 z-20">
+        <div class="flex items-center mb-8">
+            <i class="fas fa-brain text-blue-500 text-2xl mr-3"></i>
+            <h1 class="text-xl font-bold">AI Assistant</h1>
+        </div>
+        <nav id="menu-container">
+            <!-- Menu items will be injected here by JavaScript -->
+            <!-- Example of a menu item structure:
+            <a href="#" class="menu-item flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-100 bg-blue-100" data-page="analisa">
+                <i class="fas fa-file-alt w-6 text-center text-blue-500"></i>
+                <span class="ml-3 font-medium">Analisa Point Requirement</span>
+            </a>
+            -->
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-md p-4 flex justify-between items-center z-10">
+            <button id="menu-toggle" class="lg:hidden text-2xl text-slate-600">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h2 class="text-xl font-semibold text-slate-800">Dashboard</h2>
+            <div>
+                <i class="fas fa-user-circle text-2xl text-slate-500"></i>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-6">
+            
+            <!-- Page: Analisa Point Requirement -->
+            <div id="page-analisa" class="page-content">
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-1">Analisa Point Requirement</h3>
+                    <p class="text-slate-500 mb-6">Masukkan poin-poin mentah dari requirement untuk dianalisa dan distrukturkan oleh AI.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Input Section -->
+                        <div>
+                            <label for="raw-requirements" class="block text-sm font-medium text-slate-700 mb-2">Poin Requirement Mentah:</label>
+                            <textarea id="raw-requirements" rows="15" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Contoh: User bisa login, ada dashboard, bisa lihat produk, bisa beli..."></textarea>
+                            <div class="flex space-x-3 mt-4">
+                                <button id="process-btn" class="flex-1 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition shadow-sm flex items-center justify-center">
+                                    <i class="fas fa-cogs mr-2"></i>
+                                    <span>Process</span>
+                                </button>
+                                <button id="clear-btn" class="flex-1 bg-slate-200 text-slate-800 font-semibold py-2 px-4 rounded-lg hover:bg-slate-300 transition shadow-sm">
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Result Section -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label for="result-box" class="block text-sm font-medium text-slate-700">Hasil Analisa:</label>
+                                <button id="export-btn" class="bg-green-500 text-white font-semibold py-1 px-3 rounded-lg hover:bg-green-600 transition shadow-sm text-sm disabled:bg-slate-300 disabled:cursor-not-allowed" disabled>
+                                    <i class="fas fa-file-export mr-1"></i>
+                                    Export
+                                </button>
+                            </div>
+                            <div id="result-container" class="relative w-full h-96 bg-slate-100 border border-slate-200 rounded-lg p-3">
+                                <pre id="result-box" class="w-full h-full overflow-y-auto whitespace-pre-wrap text-slate-700 text-sm font-mono"></pre>
+                                <!-- Loading Indicator -->
+                                <div id="loading-indicator" class="absolute inset-0 bg-slate-100 bg-opacity-75 flex flex-col items-center justify-center hidden">
+                                    <div class="loader"></div>
+                                    <p class="mt-3 text-slate-600 font-medium">Menganalisa requirement...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add other pages here. Make sure to give them a unique id and the "page-content" class -->
+            <div id="page-placeholder" class="page-content hidden">
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="text-2xl font-bold text-slate-800">Halaman Baru</h3>
+                    <p class="text-slate-500">Konten untuk menu baru akan ditampilkan di sini.</p>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white text-center text-sm p-4 text-slate-500 border-t">
+            © 2025 Requirement Analysis Assistant. Dibuat dengan Gemini.
+        </footer>
+    </div>
+    
+    <!-- Overlay for sidebar on mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden lg:hidden"></div>
+
+    <!-- ========= JAVASCRIPT SECTION ========= -->
+    <script type="module">
+        // Import configurations from the external file
+        import { API_CONFIG, PROMPT_CONFIG } from './config.js';
+
+        // --- Main Application Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Element selectors
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const menuContainer = document.getElementById('menu-container');
+
+            const processBtn = document.getElementById('process-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const exportBtn = document.getElementById('export-btn');
+            const rawRequirementsInput = document.getElementById('raw-requirements');
+            const resultBox = document.getElementById('result-box');
+            const resultContainer = document.getElementById('result-container');
+            const loadingIndicator = document.getElementById('loading-indicator');
+
+            // --- Menu and Navigation Logic ---
+
+            // Define your menu items here. To add a new menu, just add a new object to this array.
+            const menuItems = [
+                { id: 'analisa', icon: 'fa-file-alt', text: 'Analisa Point Requirement', active: true },
+                // { id: 'placeholder', icon: 'fa-star', text: 'Menu Baru', active: false }, // Example of adding a new menu
+            ];
+            
+            const renderMenu = () => {
+                menuContainer.innerHTML = menuItems.map(item => `
+                    <a href="#" class="menu-item flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-100 ${item.active ? 'bg-blue-100' : ''}" data-page="${item.id}">
+                        <i class="fas ${item.icon} w-6 text-center ${item.active ? 'text-blue-500' : ''}"></i>
+                        <span class="ml-3 font-medium">${item.text}</span>
+                    </a>
+                `).join('');
+            };
+            
+            const setActivePage = (pageId) => {
+                // Hide all pages
+                document.querySelectorAll('.page-content').forEach(page => {
+                    page.classList.add('hidden');
+                });
+                // Show the active page
+                const activePage = document.getElementById(`page-${pageId}`);
+                if (activePage) {
+                    activePage.classList.remove('hidden');
+                }
+
+                // Update menu active state
+                menuItems.forEach(item => item.active = item.id === pageId);
+                renderMenu(); // Re-render menu to show active state
+            };
+            
+            menuContainer.addEventListener('click', (e) => {
+                const menuItem = e.target.closest('.menu-item');
+                if (menuItem) {
+                    e.preventDefault();
+                    const pageId = menuItem.dataset.page;
+                    setActivePage(pageId);
+                    // Hide sidebar on mobile after clicking a menu item
+                    if (window.innerWidth < 1024) {
+                       sidebar.classList.add('-translate-x-full');
+                       overlay.classList.add('hidden');
+                    }
+                }
+            });
+
+            // Initial setup
+            renderMenu();
+            setActivePage('analisa');
+
+
+            // --- Sidebar Toggle Logic for Mobile ---
+            const toggleSidebar = () => {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            };
+
+            menuToggle.addEventListener('click', toggleSidebar);
+            overlay.addEventListener('click', toggleSidebar);
+
+            // --- "Analisa Point Requirement" Page Logic ---
+
+            const callGeminiAPI = async (prompt) => {
+                loadingIndicator.classList.remove('hidden');
+                resultBox.textContent = '';
+                exportBtn.disabled = true;
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_CONFIG.apiKey}`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                    systemInstruction: {
+                        parts: [{ text: PROMPT_CONFIG.systemInstruction }]
+                    },
+                };
+
+                try {
+                    // Implement exponential backoff for retries
+                    let response;
+                    let retries = 3;
+                    let delay = 1000;
+                    for (let i = 0; i < retries; i++) {
+                        response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (response.ok) {
+                            break; // Success
+                        }
+                        
+                        if (response.status === 429 || response.status >= 500) {
+                            console.warn(`Request failed with status ${response.status}. Retrying in ${delay}ms...`);
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            delay *= 2; // Double the delay for the next retry
+                        } else {
+                            // Don't retry for other client-side errors
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                    }
+
+                    if (!response.ok) {
+                         throw new Error(`Failed to get a successful response after ${retries} retries.`);
+                    }
+
+
+                    const result = await response.json();
+                    const candidate = result.candidates?.[0];
+
+                    if (candidate && candidate.content?.parts?.[0]?.text) {
+                        const generatedText = candidate.content.parts[0].text;
+                        resultBox.textContent = generatedText;
+                        exportBtn.disabled = false;
+                    } else {
+                        throw new Error('Invalid response structure from API.');
+                    }
+                } catch (error) {
+                    console.error("Error calling Gemini API:", error);
+                    resultBox.textContent = `Terjadi kesalahan saat menghubungi AI. Silakan coba lagi.\n\nDetail: ${error.message}`;
+                } finally {
+                    loadingIndicator.classList.add('hidden');
+                }
+            };
+
+            processBtn.addEventListener('click', () => {
+                const rawText = rawRequirementsInput.value.trim();
+                if (rawText) {
+                    callGeminiAPI(rawText);
+                } else {
+                    resultBox.textContent = "Mohon masukkan poin-poin requirement terlebih dahulu.";
+                }
+            });
+
+            clearBtn.addEventListener('click', () => {
+                rawRequirementsInput.value = '';
+                resultBox.textContent = '';
+                exportBtn.disabled = true;
+                rawRequirementsInput.focus();
+            });
+
+            exportBtn.addEventListener('click', () => {
+                const textToExport = resultBox.textContent;
+                if (!textToExport) return;
+
+                const blob = new Blob([textToExport], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'hasil_analisa_requirement.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        });
+    </script>
+</body>
+</html>
+

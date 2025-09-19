@@ -127,7 +127,10 @@
         </div>
     </div>
     
-    <script src="config.js"></script>
+    <!-- <script src="config.js"></script> -->
+     <script type="module">
+        import { API_CONFIG, PROMPT_CONFIG,VERSION } from './config.js';
+     </script>
     <script>
         // =================================================================================
         // DOM ELEMENT REFERENCES
@@ -147,6 +150,7 @@
         const exportBtn = document.getElementById('exportBtn');
         const copyBtn = document.getElementById('copyBtn');
         const copyBtnText = document.getElementById('copyBtnText');
+        
 
         // =================================================================================
         // STATE MANAGEMENT
@@ -165,13 +169,14 @@
                     responseSchema: schema,
                 },
                 systemInstruction: {
-                    parts: [{ text: SYSTEM_INSTRUCTION_TEXT }]
+                    parts: [{ text: PROMPT_CONFIG.systemInstructionScenario }]
                 }
             };
             
             let response;
             let retries = 3;
             let delay = 1000;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_CONFIG.apiKey}`;
 
             for (let i = 0; i < retries; i++) {
                 try {

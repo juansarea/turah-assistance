@@ -128,6 +128,11 @@
                 </div>
             </div>
 
+            <div id="page-scenario" class="page-content hidden">
+              </div>
+
+            <div id="page-placeholder" class="page-content hidden">
+
             <!-- Add other pages here. Make sure to give them a unique id and the "page-content" class -->
             <div id="page-placeholder" class="page-content hidden">
                 <div class="bg-white p-6 rounded-xl shadow-sm">
@@ -171,9 +176,11 @@
             // --- Menu and Navigation Logic ---
 
             // Define your menu items here. To add a new menu, just add a new object to this array.
+            // Ganti bagian ini di dalam script Anda
             const menuItems = [
                 { id: 'analisa', icon: 'fa-file-alt', text: 'Analisa Point Requirement', active: true },
-                // { id: 'placeholder', icon: 'fa-star', text: 'Menu Baru', active: false }, // Example of adding a new menu
+                // TAMBAHKAN BARIS DI BAWAH INI
+                { id: 'scenario', icon: 'fa-tasks', text: 'Scenario Analyzer', active: false, url: 'generator-scenario.html' },
             ];
             
             const renderMenu = () => {
@@ -185,22 +192,64 @@
                 `).join('');
             };
             
-            const setActivePage = (pageId) => {
-                // Hide all pages
+            // const setActivePage = (pageId) => {
+            //     // Hide all pages
+            //     document.querySelectorAll('.page-content').forEach(page => {
+            //         page.classList.add('hidden');
+            //     });
+            //     // Show the active page
+            //     const activePage = document.getElementById(`page-${pageId}`);
+            //     if (activePage) {
+            //         activePage.classList.remove('hidden');
+            //     }
+
+            //     // Update menu active state
+            //     menuItems.forEach(item => item.active = item.id === pageId);
+            //     renderMenu(); // Re-render menu to show active state
+            // };
+            
+            // GANTI FUNGSI LAMA setActivePage DENGAN YANG INI
+            const setActivePage = async (pageId) => {
+                // Sembunyikan semua halaman terlebih dahulu
                 document.querySelectorAll('.page-content').forEach(page => {
                     page.classList.add('hidden');
                 });
-                // Show the active page
+
                 const activePage = document.getElementById(`page-${pageId}`);
-                if (activePage) {
+                const menuItem = menuItems.find(item => item.id === pageId);
+
+                if (activePage && menuItem) {
+                    // Cek jika menu punya URL dan kontennya belum dimuat
+                    if (menuItem.url && activePage.innerHTML.trim() === '') {
+                        try {
+                            // Tampilkan loading spinner sederhana selagi memuat
+                            activePage.innerHTML = `<div class="flex justify-center items-center h-64"><div class="loader"></div></div>`;
+                            
+                            const response = await fetch(menuItem.url);
+                            if (!response.ok) {
+                                throw new Error(`Gagal memuat ${menuItem.url}. Status: ${response.status}`);
+                            }
+                            const htmlContent = await response.text();
+                            activePage.innerHTML = htmlContent;
+                        } catch (error) {
+                            console.error("Error fetching page content:", error);
+                            activePage.innerHTML = `<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                                                        <strong class="font-bold">Error!</strong>
+                                                        <span class="block sm:inline"> Gagal memuat konten. Pastikan file ${menuItem.url} ada di folder yang sama.</span>
+                                                    </div>`;
+                        }
+                    }
+                    
+                    // Tampilkan halaman yang aktif
                     activePage.classList.remove('hidden');
                 }
 
-                // Update menu active state
+                // Perbarui status aktif di menu dan render ulang
                 menuItems.forEach(item => item.active = item.id === pageId);
-                renderMenu(); // Re-render menu to show active state
+                renderMenu(); 
             };
-            
+
+
             menuContainer.addEventListener('click', (e) => {
                 const menuItem = e.target.closest('.menu-item');
                 if (menuItem) {

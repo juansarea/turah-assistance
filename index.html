@@ -145,7 +145,7 @@
 
         <!-- Footer -->
         <footer class="bg-white text-center text-sm p-4 text-slate-500 border-t">
-            © 2025 Turah Assistant. ${VERSION.version}
+            © 2025 Turah Assistant.  <p id="version"></p>
         </footer>
     </div>
     
@@ -190,6 +190,9 @@
                     </a>
                 `).join('');
             };
+
+            const setVersion = document.getElementById(`version`);
+            setVersion.innerHTML = `${VERSION.version}`;
             
             // const setActivePage = (pageId) => {
             //     // Hide all pages

@@ -16,7 +16,29 @@ export const PROMPT_CONFIG = {
     6.  **JANGAN LEWATKAN APAPUN:** Pastikan setiap poin mentah dari pengguna tercakup dalam hasil analisa Anda. Jika ada yang ambigu, berikan asumsi yang masuk akal dan tandai sebagai "Asumsi".
     7.  **GUNAKAN FORMAT MARKDOWN:** Gunakan format Markdown untuk membuat output mudah dibaca, seperti heading (#), list (* atau -), dan bold (**teks**).
 
-    Hasil akhir harus menjadi acuan tunggal yang kuat dan jelas bagi tim pengembang (developer) dan tim penjamin kualitas (quality assurance) untuk membuat skenario pengujian dan tugas pengembangan.`
+    Hasil akhir harus menjadi acuan tunggal yang kuat dan jelas bagi tim pengembang (developer) dan tim penjamin kualitas (quality assurance) untuk membuat skenario pengujian dan tugas pengembangan.
+    
+    Tambahkan Informasi untuk mengidentifikasi  modul dan fitur dengan format :
+    - Hasil akhir HARUS berupa tabel Markdown yang rapi.
+    - Tabel wajib memiliki 4 kolom berikut: Level, Tipe, Nama, dan Deskripsi Singkat.
+    - Gunakan emoji untuk visualisasi di kolom Tipe:
+         🏢 untuk Modul
+         ✨ untuk Fitur
+     Tulis deskripsi yang singkat namun informatif untuk setiap baris.
+
+CONTOH STRUKTUR OUTPUT:
+
+| Level | Tipe | Nama | Deskripsi Singkat |
+| :--- | :--- | :--- | :--- |
+| 1 | 🏢 Modul | [Nama Modul Utama] | Deskripsi singkat tentang fungsi utama modul ini. |
+| 2 | ✨ Fitur | [Nama Fitur Pertama] | Deskripsi singkat tentang apa yang bisa dilakukan fitur ini. |
+| 2 | ✨ Fitur | [Nama Fitur Kedua] | Deskripsi singkat tentang apa yang bisa dilakukan fitur ini. |
+| 1 | 🏢 Modul | [Nama Modul Lainnya] | Deskripsi singkat tentang fungsi utama modul ini. |
+| 2 | ✨ Fitur | [Fitur di bawah modul kedua]| Deskripsi singkat tentang apa yang bisa dilakukan fitur ini. |
+
+---
+    
+    `
 };
 
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=AIzaSyDHALOs_VpIGq7TdTPykGJClVe_QG4gC-o`;

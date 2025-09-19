@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scenario Analyzer v1.8</title>
+    <title>Scenario Analyzer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -16,7 +16,7 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            border-left-color: #4f46e5; /* indigo-600 */
+            border-left-color: #09f;
             animation: spin 1s ease infinite;
         }
         @keyframes spin {
@@ -47,15 +47,16 @@
         <div class="w-full max-w-6xl mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-8">
             
             <header class="text-center mb-8">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Scenario Analyzer by Turah v1.8</h1>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Scenario Analyzer by Turah v1.7</h1>
                 <p class="mt-2 text-md text-gray-500">Masukkan requirement fitur untuk membuat skenario pengujian.</p>
             </header>
 
             <main>
+                <!-- Input Form -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="md:col-span-2">
                         <label for="requirements" class="block text-sm font-medium text-gray-700 mb-2">Poin-Poin Requirement</label>
-                        <textarea id="requirements" name="requirements" rows="11" class="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" placeholder="Contoh: Pengguna harus bisa login menggunakan email dan password. Jika password salah, tampilkan pesan error."></textarea>
+                        <textarea id="requirements" name="requirements" rows="10" class="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" placeholder="Contoh: Pengguna harus bisa login menggunakan email dan password. Jika password salah, tampilkan pesan error."></textarea>
                     </div>
                     
                     <div class="md:col-span-1 flex flex-col space-y-4">
@@ -70,35 +71,35 @@
                             <label for="featureName" class="block text-sm font-medium text-gray-700 mb-2">Fitur/Program</label>
                             <input type="text" id="featureName" name="featureName" class="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150" placeholder="Contoh: Login Pengguna">
                         </div>
-                        <div class="flex space-x-2">
-                             <button id="clearBtn" class="w-1/3 bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-lg shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition duration-200 ease-in-out">
-                                Clear
-                            </button>
-                            <button id="processBtn" class="w-2/3 bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 ease-in-out flex items-center justify-center">
-                                <svg id="button-icon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                <span id="button-text">Analyze</span>
-                            </button>
-                        </div>
+                        <button id="processBtn" class="w-full bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 ease-in-out flex items-center justify-center">
+                            <svg id="button-icon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3m6-9h3m-3 6h3M9 6V3m0 18v-3"></path></svg>
+                            <span id="button-text">Analyze Scenario</span>
+                        </button>
                     </div>
                 </div>
 
+                <!-- Loading and Error Display -->
                 <div id="loading" class="hidden my-6 flex flex-col items-center justify-center text-center">
                     <div class="spinner"></div>
                     <p class="mt-4 text-gray-600">Turah sedang bekerja membuat skenario, mohon tunggu sebentar...</p>
                 </div>
                 <div id="error" class="hidden my-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg"></div>
-                <div id="summary" class="hidden my-6 p-4 bg-green-100 border border-green-400 text-green-800 rounded-lg"></div>
 
+                <!-- Results Table -->
                 <div id="resultsContainer" class="mt-10 hidden">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-2xl font-bold text-gray-800">Hasil Skenario</h2>
                         <div id="actionButtons" class="flex space-x-2">
-                             <button id="copyBtn" class="bg-blue-100 text-blue-700 font-semibold py-2 px-4 rounded-lg hover:bg-blue-200 transition duration-150 flex items-center space-x-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                            <button id="copyBtn" class="bg-blue-100 text-blue-700 font-semibold py-2 px-4 rounded-lg hover:bg-blue-200 transition duration-150 flex items-center space-x-2 text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 Skenario Analyzer by Turah v1.70 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
                                 <span id="copyBtnText">Copy</span>
                             </button>
                             <button id="exportBtn" class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition duration-150 flex items-center space-x-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
                                 <span>Export Excel</span>
                             </button>
                         </div>
@@ -119,7 +120,8 @@
                                 </tr>
                             </thead>
                             <tbody id="resultsTableBody" class="bg-white divide-y divide-gray-200">
-                                </tbody>
+                                <!-- Rows will be inserted here -->
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -127,40 +129,25 @@
         </div>
     </div>
     
-    <!-- <script src="config.js"></script> -->
-     <script type="module">
-        import { API_CONFIG, PROMPT_CONFIG,VERSION } from './config.js';
-     </script>
+    <script src="config.js"></script>
     <script>
-        // =================================================================================
-        // DOM ELEMENT REFERENCES
-        // =================================================================================
         const processBtn = document.getElementById('processBtn');
-        const clearBtn = document.getElementById('clearBtn');
         const requirementsInput = document.getElementById('requirements');
         const scenarioTypeSelect = document.getElementById('scenarioType');
-        const featureNameInput = document.getElementById('featureName');
         const resultsTableBody = document.getElementById('resultsTableBody');
         const resultsContainer = document.getElementById('resultsContainer');
         const loadingIndicator = document.getElementById('loading');
         const errorContainer = document.getElementById('error');
-        const summaryContainer = document.getElementById('summary');
         const buttonText = document.getElementById('button-text');
         const buttonIcon = document.getElementById('button-icon');
         const exportBtn = document.getElementById('exportBtn');
         const copyBtn = document.getElementById('copyBtn');
         const copyBtnText = document.getElementById('copyBtnText');
-        
+        const featureNameInput = document.getElementById('featureName');
 
-        // =================================================================================
-        // STATE MANAGEMENT
-        // =================================================================================
         let generatedScenarios = [];
         let currentFeatureName = '';
-        
-        // =================================================================================
-        // API CALL LOGIC
-        // =================================================================================
+
         async function callGeminiAPI(prompt, schema) {
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }],
@@ -169,14 +156,15 @@
                     responseSchema: schema,
                 },
                 systemInstruction: {
-                    parts: [{ text: PROMPT_CONFIG.systemInstructionScenario }]
+                    parts: [{
+                        text: SYSTEM_INSTRUCTION_TEXT
+                    }]
                 }
             };
             
             let response;
             let retries = 3;
             let delay = 1000;
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_CONFIG.apiKey}`;
 
             for (let i = 0; i < retries; i++) {
                 try {
@@ -189,11 +177,12 @@
                         return await response.json();
                     }
                     if (response.status === 429 || response.status >= 500) {
+                        // Throttling or server error, wait and retry
                         await new Promise(resolve => setTimeout(resolve, delay));
                         delay *= 2; // Exponential backoff
                     } else {
-                        const errorBody = await response.text();
-                        throw new Error(`Error ${response.status}: ${errorBody}`);
+                        // Other client-side error
+                        throw new Error(`Error ${response.status}: ${response.statusText}`);
                     }
                 } catch (error) {
                     if (i === retries - 1) throw error;
@@ -201,35 +190,7 @@
                     delay *= 2;
                 }
             }
-        }
 
-        // =================================================================================
-        // UI UPDATE LOGIC
-        // =================================================================================
-        function updateUI(state, data = {}) {
-            // Reset all states
-            loadingIndicator.classList.add('hidden');
-            errorContainer.classList.add('hidden');
-            summaryContainer.classList.add('hidden');
-            resultsContainer.classList.add('hidden');
-            processBtn.disabled = false;
-            buttonText.textContent = 'Analyze';
-            buttonIcon.classList.remove('animate-spin');
-
-            if (state === 'loading') {
-                loadingIndicator.classList.remove('hidden');
-                processBtn.disabled = true;
-                buttonText.textContent = 'Memproses...';
-                buttonIcon.classList.add('animate-spin');
-            } else if (state === 'error') {
-                errorContainer.textContent = `Terjadi kesalahan: ${data.message}. Mohon coba lagi.`;
-                errorContainer.classList.remove('hidden');
-            } else if (state === 'success') {
-                displayResults(data.scenarios, data.featureName);
-                summaryContainer.innerHTML = `<strong>Sukses!</strong> Dihasilkan <strong>${data.scenarios.length}</strong> skenario untuk fitur "${data.featureName}".`;
-                summaryContainer.classList.remove('hidden');
-                resultsContainer.classList.remove('hidden');
-            }
         }
 
         function displayResults(scenarios, featureName) {
@@ -244,51 +205,60 @@
                 scenarios.forEach(scenario => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-700">${scenario.id || 'N/A'}</td>
-                        <td class="px-6 py-4 text-sm text-gray-700">${scenario.aspect || 'N/A'}</td>
-                        <td class="px-6 py-4 text-sm text-gray-700">${featureName || 'N/A'}</td>
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900">${scenario.judul || 'N/A'}</td>
-                        <td class="px-6 py-4"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${scenario.tipe === 'Positif' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${scenario.tipe || 'N/A'}</span></td>
-                        <td class="px-6 py-4 text-sm text-gray-500">${scenario.deskripsi || 'N/A'}</td>
-                        <td class="px-6 py-4 text-sm text-gray-500">${scenario.aktor || 'N/A'}</td>
-                        <td class="px-6 py-4 text-sm text-gray-500">${(scenario.langkah || '').replace(/\n/g, '<br>')}</td>
-                        <td class="px-6 py-4 text-sm text-gray-500">${scenario.hasil || 'N/A'}</td>
+                        <td class="whitespace-nowrap">${scenario.id || 'N/A'}</td>
+                        <td>${scenario.aspect || 'N/A'}</td>
+                        <td>${featureName || 'N/A'}</td>
+                        <td>${scenario.judul || 'N/A'}</td>
+                        <td><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${scenario.tipe === 'Positif' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${scenario.tipe || 'N/A'}</span></td>
+                        <td class="text-sm text-gray-500">${scenario.deskripsi || 'N/A'}</td>
+                        <td>${scenario.aktor || 'N/A'}</td>
+                        <td class="text-sm text-gray-500">${(scenario.langkah || '').replace(/\n/g, '<br>')}</td>
+                        <td class="text-sm text-gray-500">${scenario.hasil || 'N/A'}</td>
                     `;
                     resultsTableBody.appendChild(row);
                 });
             }
+            resultsContainer.classList.remove('hidden');
         }
 
-        // =================================================================================
-        // EVENT LISTENERS
-        // =================================================================================
         processBtn.addEventListener('click', async () => {
             const requirements = requirementsInput.value.trim();
             const scenarioType = scenarioTypeSelect.value;
             currentFeatureName = featureNameInput.value.trim();
 
-            if (!requirements || !currentFeatureName) {
-                const message = !requirements ? 'Mohon masukkan poin-poin requirement terlebih dahulu.' : 'Mohon masukkan nama Fitur/Program terlebih dahulu.';
-                updateUI('error', { message });
+            if (!requirements) {
+                errorContainer.textContent = 'Mohon masukkan poin-poin requirement terlebih dahulu.';
+                errorContainer.classList.remove('hidden');
                 return;
             }
 
-            updateUI('loading');
+            // UI updates for loading state
+            errorContainer.classList.add('hidden');
+            resultsContainer.classList.add('hidden');
+            loadingIndicator.classList.remove('hidden');
+            processBtn.disabled = true;
+            buttonText.textContent = 'Memproses...';
+            buttonIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M20 20v-5h-5"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 9a9 9 0 0114.13-6.36M20 15a9 9 0 01-14.13 6.36"></path>`;
+            buttonIcon.classList.add('animate-spin');
             
-            const prompt = `Tipe Skenario yang diminta: "${scenarioType}"\nRequirement Fitur: "${requirements}"`;
+            const prompt = `
+                Tipe Skenario yang diminta: "${scenarioType}"
+                Requirement Fitur: "${requirements}"
+            `;
+            
             const schema = {
                 type: "ARRAY",
                 items: {
                     type: "OBJECT",
                     properties: {
-                        "id": { "type": "STRING", "description": "ID unik untuk test case, contoh: TC-LOGIN-001" },
-                        "aspect": { "type": "STRING", "description": "Aspek kualitas yang diuji, contoh: Functional Correctness" },
-                        "judul": { "type": "STRING", "description": "Judul yang jelas untuk skenario pengujian." },
+                        "id": { "type": "STRING" },
+                        "aspect": { "type": "STRING" },
+                        "judul": { "type": "STRING" },
                         "tipe": { "type": "STRING", "enum": [scenarioType] },
-                        "deskripsi": { "type": "STRING", "description": "Penjelasan singkat tujuan dari skenario ini." },
-                        "aktor": { "type": "STRING", "description": "Peran yang melakukan aksi, contoh: Pengguna Terdaftar" },
-                        "langkah": { "type": "STRING", "description": "Langkah-langkah rinci, dipisahkan oleh newline." },
-                        "hasil": { "type": "STRING", "description": "Hasil yang diharapkan setelah langkah-langkah dijalankan." }
+                        "deskripsi": { "type": "STRING" },
+                        "aktor": { "type": "STRING" },
+                        "langkah": { "type": "STRING" },
+                        "hasil": { "type": "STRING" }
                     },
                     required: ["id", "aspect", "judul", "tipe", "deskripsi", "aktor", "langkah", "hasil"]
                 }
@@ -301,56 +271,62 @@
                 if (candidate && candidate.content?.parts?.[0]?.text) {
                     const scenariosJson = candidate.content.parts[0].text;
                     generatedScenarios = JSON.parse(scenariosJson);
-                    updateUI('success', { scenarios: generatedScenarios, featureName: currentFeatureName });
+                    displayResults(generatedScenarios, currentFeatureName);
                 } else {
-                    const reason = candidate?.finishReason || "Tidak diketahui";
-                    throw new Error(`Respon dari AI tidak valid atau kosong. Alasan: ${reason}. Ini mungkin karena filter keamanan.`);
+                    throw new Error("Respon dari AI tidak valid atau kosong.");
                 }
+
             } catch (err) {
                 console.error('Error:', err);
-                updateUI('error', { message: err.message });
+                errorContainer.textContent = `Terjadi kesalahan: ${err.message}. Mohon coba lagi.`;
+                errorContainer.classList.remove('hidden');
+                resultsContainer.classList.add('hidden');
+            } finally {
+                // Restore UI from loading state
+                loadingIndicator.classList.add('hidden');
+                processBtn.disabled = false;
+                buttonText.textContent = 'Analyze Scenario';
+                buttonIcon.innerHTML = `<svg id="button-icon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3m6-9h3m-3 6h3M9 6V3m0 18v-3"></path</svg>`;
+                buttonIcon.classList.remove('animate-spin');
             }
         });
 
-        clearBtn.addEventListener('click', () => {
-            requirementsInput.value = '';
-            featureNameInput.value = '';
-            scenarioTypeSelect.value = 'Positif';
-            generatedScenarios = [];
-            currentFeatureName = '';
-            updateUI('initial');
-        });
-
-        copyBtn.addEventListener('click', copyResultsToClipboard);
-        exportBtn.addEventListener('click', exportResultsToExcel);
-
-        // =================================================================================
-        // UTILITY FUNCTIONS (Copy & Export)
-        // =================================================================================
         function formatForClipboard(scenarios) {
             const headers = ["ID", "Aspek Fitur", "Fitur/Program", "Judul Skenario", "Tipe", "Deskripsi", "Aktor", "Langkah-langkah", "Hasil yang Diharapkan"];
             let content = headers.join('\t') + '\n';
+
             scenarios.forEach(s => {
                 const row = [s.id, s.aspect, currentFeatureName, s.judul, s.tipe, s.deskripsi, s.aktor, s.langkah, s.hasil];
-                content += row.map(cell => `"${(cell || '').toString().replace(/"/g, '""')}"`).join('\t') + '\n';
+                content += row.map(cell => (cell || '').toString().replace(/\n/g, ' ')).join('\t') + '\n';
             });
+
             return content;
         }
 
         function copyResultsToClipboard() {
             if (generatedScenarios.length === 0) return;
+
             const textToCopy = formatForClipboard(generatedScenarios);
             navigator.clipboard.writeText(textToCopy).then(() => {
                 copyBtnText.textContent = 'Tercopy!';
-                setTimeout(() => { copyBtnText.textContent = 'Copy'; }, 2000);
+                setTimeout(() => {
+                    copyBtnText.textContent = 'Copy';
+                }, 2000);
             }).catch(err => {
                 console.error('Gagal menyalin:', err);
+                copyBtnText.textContent = 'Gagal';
+                 setTimeout(() => {
+                    copyBtnText.textContent = 'Copy';
+                }, 2000);
             });
         }
         
         function escapeCsvCell(cell) {
-            if (cell === null || cell === undefined) return '';
+            if (cell === null || cell === undefined) {
+                return '';
+            }
             let cellString = cell.toString();
+            // Wrap in quotes if it contains a comma, double quote, or newline
             if (cellString.search(/("|,|\n)/g) >= 0) {
                 cellString = '"' + cellString.replace(/"/g, '""') + '"';
             }
@@ -359,26 +335,36 @@
 
         function exportResultsToExcel() {
             if (generatedScenarios.length === 0) return;
+
             const headers = ["ID", "Aspek Fitur", "Fitur/Program", "Judul Skenario", "Tipe", "Deskripsi", "Aktor", "Langkah-langkah", "Hasil yang Diharapkan"];
             let csvContent = headers.map(escapeCsvCell).join(',') + '\n';
+
             generatedScenarios.forEach(s => {
                 const row = [s.id, s.aspect, currentFeatureName, s.judul, s.tipe, s.deskripsi, s.aktor, s.langkah, s.hasil];
                 csvContent += row.map(escapeCsvCell).join(',') + '\n';
             });
             
-            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); // BOM for Excel
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             if (link.download !== undefined) {
                 const url = URL.createObjectURL(blob);
                 link.setAttribute("href", url);
-                link.setAttribute("download", `skenario_${currentFeatureName.replace(/ /g,"_") || 'pengujian'}.csv`);
+                link.setAttribute("download", "skenario_pengujian.csv");
                 link.style.visibility = 'hidden';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
             }
         }
+
+        copyBtn.addEventListener('click', copyResultsToClipboard);
+        exportBtn.addEventListener('click', exportResultsToExcel);
     </script>
 
 </body>
 </html>
+
+
+
+
+

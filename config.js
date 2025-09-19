@@ -1,6 +1,7 @@
-export const API_CONFIG = {
-    // IMPORTANT: Leave apiKey as an empty string. 
-    // The platform will automatically provide the key at runtime.
+export const VERSION = { 
+    version: "2.0"
+};
+export const API_CONFIG = { 
     apiKey: "AIzaSyDHALOs_VpIGq7TdTPykGJClVe_QG4gC-o"
 };
 

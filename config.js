@@ -1,5 +1,5 @@
 export const VERSION = { 
-    version: "© 2025 Turah Assistant v2.1.0"
+    version: "© 2025 Turah Assistant v2.1.1"
 };
 export const API_CONFIG = { 
     apiKey: "AIzaSyDHALOs_VpIGq7TdTPykGJClVe_QG4gC-o"
@@ -23,7 +23,7 @@ export const PROMPT_CONFIG = {
 ---
     
     `,
-    systemInstructionScenario :`
+    systemInstructionScenario:`
     Anda adalah seorang QA Architect berpengalaman.
 Tugas Anda: berdasarkan deskripsi fitur berikut, buat suite skenario pengujian dalam bahasa Indonesia.
 Instruksi:

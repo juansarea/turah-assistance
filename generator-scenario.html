@@ -129,8 +129,9 @@
         </div>
     </div>
     
-    <script src="config.js"></script>
-    <script>
+    <!-- <script src="config.js"></script> -->
+    <script type="module">
+        import { API_CONFIG, PROMPT_CONFIG,VERSION } from './config.js';
         const processBtn = document.getElementById('processBtn');
         const requirementsInput = document.getElementById('requirements');
         const scenarioTypeSelect = document.getElementById('scenarioType');
@@ -148,6 +149,8 @@
         let generatedScenarios = [];
         let currentFeatureName = '';
 
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_CONFIG.apiKey}`;
+
         async function callGeminiAPI(prompt, schema) {
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }],
@@ -157,7 +160,7 @@
                 },
                 systemInstruction: {
                     parts: [{
-                        text: SYSTEM_INSTRUCTION_TEXT
+                        text: PROMPT_CONFIG.systemInstructionScenario
                     }]
                 }
             };

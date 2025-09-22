@@ -287,8 +287,8 @@
                 resultBox.textContent = '';
                 exportBtn.disabled = true;
 
-                //const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_CONFIG.apiKey}`;
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${API_CONFIG.apiKey}`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_CONFIG.apiKey}`;
+                // const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${API_CONFIG.apiKey}`;
                 const payload = {
                     contents: [{ parts: [{ text: prompt }] }],
                     systemInstruction: {

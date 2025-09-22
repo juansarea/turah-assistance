@@ -1,5 +1,5 @@
 export const VERSION = { 
-    version: "© 2025 Turah Assistant v2.1.1"
+    version: "© 2025 Turah Assistant v2.1.2"
 };
 export const API_CONFIG = { 
     apiKey: "AIzaSyDHALOs_VpIGq7TdTPykGJClVe_QG4gC-o"
@@ -15,7 +15,7 @@ export const PROMPT_CONFIG = {
     4.  **IDENTIFIKASI AKTOR:** Tentukan siapa saja (misal: User, Admin, Tamu) yang berinteraksi dengan setiap fitur.
     5.  **TENTUKAN KASUS PENGGUNAAN (USE CASES):** Buat daftar use case untuk setiap fitur, termasuk skenario positif (happy path) dan skenario negatif (misal: input salah, error).
     6.  **JANGAN LEWATKAN APAPUN:** Pastikan setiap poin mentah dari pengguna tercakup dalam hasil analisa Anda. Jika ada yang ambigu, berikan asumsi yang masuk akal dan tandai sebagai "Asumsi".
-    7.  **GUNAKAN FORMAT MARKDOWN:** Gunakan format Markdown untuk membuat output mudah dibaca, seperti heading (#), list (-).
+    7.  **GUNAKAN FORMAT MARKDOWN:** Gunakan format Markdown untuk membuat output mudah dibaca  seperti Judul utama menggunakan satu tanda pagar (#) dan Informasi detail menggunakan bullet list (-) tanpa cetak tebal atau heading tambahan.
 
     Hasil akhir harus menjadi acuan tunggal yang kuat dan jelas bagi tim pengembang (developer) dan tim penjamin kualitas (quality assurance) untuk membuat skenario pengujian dan tugas pengembangan.
    

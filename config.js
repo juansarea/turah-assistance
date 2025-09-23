@@ -1,5 +1,5 @@
 export const VERSION = { 
-    version: "© 2025 Turah Assistant v2.1.4"
+    version: "© 2025 Turah Assistant v2.1.5"
 };
 export const API_CONFIG = { 
     apiKey: "AIzaSyDHALOs_VpIGq7TdTPykGJClVe_QG4gC-o"
